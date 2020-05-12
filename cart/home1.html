@@ -1,0 +1,66 @@
+
+
+{% block content %}
+{% load cart_tag %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  {% if {{ request.user| cart_total }} %}
+  
+<div class="container my-5">
+<div class="my-5">
+	<h2>Your Cart</h2>
+</div>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      
+      <th scope="col">#</th>
+      <th scope="col">{{ request.user| cart_total }}</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Price</th>
+    </tr>
+  </thead>
+  <tbody>
+  	{% for cart in carts %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ cart.item.name }}</td>
+      <td>
+        <a class="mr-2" href="{% url 'mainapp:decrease-cart' cart.item.slug %}"><span class="badge badge-light"><i class="fas fa-minus"></i></span></a>
+      {{ cart.quantity }}
+      <a class="ml-2" href="{% url 'mainapp:cart' cart.item.slug %}" ><span class="badge badge-light"><i class="fas fa-plus"></i></span></a>
+      </td>
+      <td>${{ cart.get_total }}</td>
+    </tr>
+	{% endfor %}
+    <tr>
+      <th scope="row"></th> 
+      <td colspan="2">Total</td>
+      <td>${{ order.get_totals| floatformat:2 }}</td>
+    </tr>
+    <tr>
+      <th scope="row"></th>
+      <td colspan="3" class="text-right ">
+        <a href="{% url 'mainapp:home' %}" class="btn btn-warning mr-4" >Continue Shoping</a>
+        <a href="{% url 'checkout:index' %}" class="btn btn-success mr-4">Proceed To Checkout</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+{% else %}
+<h1>empty</h1>
+{% endif %}
+
+  
+</body>
+</html>
+
+{% endblock %}
